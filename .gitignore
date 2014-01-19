@@ -1,3 +1,4 @@
+.vagrant
 *.class
 *.log
 
