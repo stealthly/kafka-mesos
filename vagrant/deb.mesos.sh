@@ -31,32 +31,22 @@ exitscript()
 }
 
 apt-get update
-apt-get install -y vim git wget screen curl
+apt-get install -y vim git wget screen curl python-setuptools python-protobuf curl default-jre
 
 #######################################################################################################################
-sudo apt-get -y update
-sudo apt-get install -y software-properties-common python-software-properties
-sudo add-apt-repository -y ppa:webupd8team/java
-sudo apt-get -y update
-sudo /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-sudo apt-get -y install oracle-java7-installer oracle-java7-set-default
+apt-get -y update
+apt-get install -y software-properties-common python-software-properties
+add-apt-repository -y ppa:webupd8team/java
+apt-get -y update
+/bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+apt-get -y install oracle-java7-installer oracle-java7-set-default
 #######################################################################################################################
 
-sudo chmod a+rw -R /opt
-sudo mkdir -p /opt/apache
-sudo chmod a+rw -R /opt/apache
-sudo apt-get install -y g++ python2.7-dev libcppunit-dev libunwind7-dev git
-sudo apt-get update && sudo apt-get install -y libsasl2-modules libsasl2-dev autotools-dev libltdl-dev libtool 
-sudo apt-get update && sudo apt-get install -y autoconf autopoint make libcurl4-openssl-dev
-cd /opt/apache
-git clone git://git.apache.org/mesos.git
-cd /opt/apache/mesos
-sudo ./bootstrap
-sudo ./configure
-sudo make
-#sudo chmod a+rw /opt/apache
-#curl -fL https://raw.github.com/mesosphere/mesos-docker/master/bin/mesos-docker-setup | sudo bash
+curl -sSfL http://downloads.mesosphere.io/master/ubuntu/12.04/mesos_0.16.0_amd64.deb --output /tmp/mesos.deb
+dpkg -i /tmp/mesos.deb
 
-#curl -s https://get.docker.io/ubuntu/ | sudo sh
+#sudo /usr/local/sbin/mesos-master --zk=zk://192.168.57.10:2181,/etc --ip=192.168.57.10
+
+#sudo /usr/local/sbin/mesos-slave --master=zk://192.168.57.10:2181,/etc --ip=192.168.57.5
 
 exitscript

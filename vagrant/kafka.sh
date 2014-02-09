@@ -13,14 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/bin/bash -x
-apt-get -y update
-apt-get install -y software-properties-common python-software-properties
-add-apt-repository -y ppa:webupd8team/java
-apt-get -y update
-/bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-apt-get -y install oracle-java7-installer oracle-java7-set-default
+#!/bin/sh -Eux
 
-/vagrant/vagrant/kafka.sh #install kafka
+#  Trap non-normal exit signals: 1/HUP, 2/INT, 3/QUIT, 15/TERM, ERR
+trap founderror 1 2 3 15 ERR
 
-/opt/apache/kafka_2.8.0-0.8.0/bin/zookeeper-server-start.sh /opt/apache/kafka_2.8.0-0.8.0/config/zookeeper.properties 1>> /tmp/zk.log 2>> /tmp/zk.log &
+founderror()
+{
+        exit 1
+}
+
+exitscript()
+{
+        #remove lock file
+        #rm $lockfile
+        exit 0
+}
+
+cd /tmp
+wget https://archive.apache.org/dist/kafka/0.8.0/kafka_2.8.0-0.8.0.tar.gz
+tar -xvf kafka_2.8.0-0.8.0.tar.gz
+mkdir -p /opt/apache
+mv kafka_2.8.0-0.8.0 /opt/apache
+
+exitscript

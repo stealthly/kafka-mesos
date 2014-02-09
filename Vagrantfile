@@ -18,7 +18,6 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
-# TODO(ksweeney): RAM requirements are not empirical and can probably be significantly lowered.
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "precise64"
 
@@ -26,20 +25,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # doesn't already exist on the user's system.
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
-  config.vm.define "zookeeper" do |zookeeper|
-    zookeeper.vm.network :private_network, ip: "192.168.57.5"
-    zookeeper.vm.provider :virtualbox do |vb|
+  config.vm.define "slave" do |slave|
+    slave.vm.network :private_network, ip: "192.168.57.5"
+    slave.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "1524"]
     end
-    zookeeper.vm.provision "shell", path: "vagrant/zk.sh"
+    slave.vm.provision "shell", path: "vagrant/deb.mesos.sh"
   end
 
-  config.vm.define "brokerOne" do |brokerOne|
-    brokerOne.vm.network :private_network, ip: "192.168.57.10"
-    brokerOne.vm.provider :virtualbox do |vb|
+  config.vm.define "master" do |master|
+    master.vm.network :private_network, ip: "192.168.57.10"
+    master.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "1524"]
     end
-    brokerOne.vm.provision "shell", path: "vagrant/broker.sh", :args => "1"
+    master.vm.provision "shell", path: "vagrant/deb.mesos.sh"
   end
 
 end
