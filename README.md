@@ -1,4 +1,4 @@
 kafka-mesos
 ===========
 
-An Apache Kafka Scheduler and Executor for Apache Mesos
+The Apache Kafka Scheduler and Executor for Apache Mesos is maintained here https://github.com/mesos/kafka
